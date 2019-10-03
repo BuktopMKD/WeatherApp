@@ -1,14 +1,22 @@
 package com.musala_tech.weatherapp.application;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.devs.acr.AutoErrorReporter;
 import com.musala_tech.weatherapp.BuildConfig;
+import com.musala_tech.weatherapp.di.modules.AppModule;
 import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
 
 public class App extends Application {
+
+    private AppComponent appComponent;
+
+    public static App get(Context context) {
+        return (App) context.getApplicationContext();
+    }
 
     @Override
     public void onCreate() {
@@ -16,6 +24,7 @@ public class App extends Application {
         initLeakCanary();
         initCrashLibrary();
         initTimber();
+        initAppComponent();
     }
 
     private void initLeakCanary() {
@@ -33,6 +42,13 @@ public class App extends Application {
 
     private void initTimber() {
         Timber.plant(new Timber.DebugTree());
+    }
+
+    private void initAppComponent() {
+        appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
+                .build();
+        appComponent.plus(this);
     }
 
 
