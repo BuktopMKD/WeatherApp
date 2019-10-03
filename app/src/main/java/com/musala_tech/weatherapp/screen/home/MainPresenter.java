@@ -31,15 +31,15 @@ public class MainPresenter implements MainContract.Presenter {
         request.add(service.getCityWeather(city, Constants.API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::CityWeatherSuccess, this::getCityWeatherError));
+                .subscribe(this::cityWeatherSuccess, this::getCityWeatherError));
     }
 
-    private void CityWeatherSuccess(WeatherResponse weatherResponse) {
-        Timber.i("Viktor ---> CityWeatherSuccess %s", weatherResponse.id);
+    private void cityWeatherSuccess(WeatherResponse weatherResponse) {
+        Timber.i("---> cityWeatherSuccess %s", weatherResponse.name);
     }
 
     private void getCityWeatherError(Throwable error) {
-        Timber.i("Viktor ---> getCityWeatherError %s", error.getCause());
+        Timber.i("---> getCityWeatherError %s", error.getCause());
     }
 
     @Override

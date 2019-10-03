@@ -1,1 +1,8 @@
-<resources></resources>
+<resources>
+    <string name="app_label">WeatherApp</string>
+    <string name="search_hint">Please enter city name</string>
+    <string name="search">Search</string>
+    <string name="city">City</string>
+    <string name="w_app">WApp</string>
+    <string name="please_add_name">Please add city name</string>
+</resources>
