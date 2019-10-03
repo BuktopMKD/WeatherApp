@@ -3,6 +3,8 @@ package com.musala_tech.weatherapp.di.modules;
 import android.app.Application;
 import android.content.Context;
 
+import org.greenrobot.eventbus.EventBus;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -26,5 +28,11 @@ public class AppModule {
     @Singleton
     public Context provideApplicationContext() {
         return application.getApplicationContext();
+    }
+
+    @Provides
+    @Singleton
+    public EventBus provideEventBus() {
+        return EventBus.getDefault();
     }
 }
