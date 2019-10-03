@@ -4,15 +4,15 @@ import com.musala_tech.weatherapp.common.presenter.BaseActivityPresenter;
 
 public interface MainContract {
 
-    public interface View {
+    interface View {
 
         void showMessage(String message);
 
     }
 
-    public interface Presenter extends BaseActivityPresenter {
+    interface Presenter extends BaseActivityPresenter {
 
-        void getCityWeather();
+        void getCityWeather(String city);
 
     }
 }
