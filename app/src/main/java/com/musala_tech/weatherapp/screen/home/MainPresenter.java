@@ -35,11 +35,11 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     private void CityWeatherSuccess(WeatherResponse weatherResponse) {
-        Timber.i("Viktor ---> getListErrorGuest %s", weatherResponse.id);
+        Timber.i("Viktor ---> CityWeatherSuccess %s", weatherResponse.id);
     }
 
     private void getCityWeatherError(Throwable error) {
-        Timber.i("Viktor ---> getListErrorGuest %s", error.getCause());
+        Timber.i("Viktor ---> getCityWeatherError %s", error.getCause());
     }
 
     @Override

@@ -2,9 +2,9 @@ package com.musala_tech.weatherapp.model;
 
 public class Wind {
 
-    final public Integer speed;
+    final public double speed;
 
-    public Wind(Integer speed) {
+    public Wind(double speed) {
         this.speed = speed;
     }
 }
