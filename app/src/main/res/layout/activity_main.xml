@@ -14,7 +14,6 @@
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:textSize="@dimen/text_size_large"
-        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,6 +24,7 @@
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:text="@string/selected_city"
         android:textSize="@dimen/text_size_x_large"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dateAndTime" />
 
@@ -34,7 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:textSize="@dimen/text_size_xxx_large"
-        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cityText" />
 
@@ -46,6 +45,7 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text="@string/temperature"
         android:textSize="@dimen/text_size_x_large"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/city" />
 
@@ -68,6 +68,7 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text="@string/humidity"
         android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/temperature" />
 
@@ -79,7 +80,6 @@
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin"
         android:textSize="@dimen/text_size_large"
-        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/humidityText" />
 
@@ -91,6 +91,7 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text="@string/pressure"
         android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/humidity" />
 
@@ -102,7 +103,6 @@
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin"
         android:textSize="@dimen/text_size_large"
-        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pressureText" />
 
@@ -114,6 +114,7 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text="@string/temp_min"
         android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pressure" />
 
@@ -124,7 +125,6 @@
         android:paddingStart="6dp"
         android:paddingEnd="@dimen/activity_horizontal_margin"
         android:textSize="@dimen/text_size_large"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/tempMinText"
         app:layout_constraintStart_toEndOf="@id/tempMinText"
         app:layout_constraintTop_toTopOf="@id/tempMinText" />
@@ -135,6 +135,7 @@
         android:layout_height="wrap_content"
         android:text="@string/temp_max"
         android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/tempMinText"
         app:layout_constraintStart_toEndOf="@id/tempMin"
         app:layout_constraintTop_toTopOf="@id/tempMinText" />
@@ -146,7 +147,6 @@
         android:paddingStart="6dp"
         android:paddingEnd="@dimen/activity_horizontal_margin"
         android:textSize="@dimen/text_size_large"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/tempMinText"
         app:layout_constraintStart_toEndOf="@id/tempMaxText"
         app:layout_constraintTop_toTopOf="@id/tempMinText" />
@@ -159,6 +159,7 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text="@string/outside"
         android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tempMinText" />
 
@@ -170,7 +171,6 @@
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin"
         android:textSize="@dimen/text_size_large"
-        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/outsideText" />
 

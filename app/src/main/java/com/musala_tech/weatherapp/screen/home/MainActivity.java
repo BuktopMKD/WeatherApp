@@ -123,7 +123,7 @@ public class MainActivity extends BaseActivity {
                     displayNoData(temperature);
                 }
                 if (!TextUtils.isEmpty(String.valueOf(weatherResponse.main.humidity))) {
-                    humidity.setText(getString(R.string.rh, String.valueOf(weatherResponse.main.humidity)));
+                    humidity.setText(getString(R.string.hum, String.valueOf(weatherResponse.main.humidity)));
                 } else {
                     displayNoData(humidity);
                 }
