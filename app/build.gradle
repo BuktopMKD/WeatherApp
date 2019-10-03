@@ -18,6 +18,23 @@ android {
         }
     }
 
+    flavorDimensions "env"
+    productFlavors {
+
+        dev {
+            applicationIdSuffix ".dev"
+            resValue "string", "app_name", "WeatherApp DEV"
+            dimension "env"
+            buildConfigField("String", "API_BASE_URL", "\"http://api.openweathermap.org/data/2.5/\"")
+        }
+
+        prod {
+            resValue "string", "app_name", "WeatherApp"
+            dimension "env"
+            buildConfigField("String", "API_BASE_URL", "\"http://api.openweathermap.org/data/2.5/\"")
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
