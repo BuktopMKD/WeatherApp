@@ -51,5 +51,7 @@ public class App extends Application {
         appComponent.plus(this);
     }
 
-
+    public AppComponent getAppComponent() {
+        return appComponent;
+    }
 }
