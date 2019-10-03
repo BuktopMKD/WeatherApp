@@ -15,6 +15,7 @@ import androidx.appcompat.widget.SearchView;
 import com.musala_tech.weatherapp.R;
 import com.musala_tech.weatherapp.application.App;
 import com.musala_tech.weatherapp.common.BaseActivity;
+import com.musala_tech.weatherapp.common.Constants;
 import com.musala_tech.weatherapp.model.WeatherResponse;
 
 import java.text.DateFormat;
@@ -29,10 +30,22 @@ import timber.log.Timber;
 
 public class MainActivity extends BaseActivity {
 
-    @BindView(R.id.city)
-    TextView city;
     @BindView(R.id.dateAndTime)
     TextView dateAndTime;
+    @BindView(R.id.city)
+    TextView city;
+    @BindView(R.id.temperature)
+    TextView temperature;
+    @BindView(R.id.humidity)
+    TextView humidity;
+    @BindView(R.id.pressure)
+    TextView pressure;
+    @BindView(R.id.tempMin)
+    TextView tempMin;
+    @BindView(R.id.tempMax)
+    TextView tempMax;
+    @BindView(R.id.outside)
+    TextView outside;
 
     @Inject
     MainPresenter presenter;
@@ -99,7 +112,52 @@ public class MainActivity extends BaseActivity {
         if (weatherResponse != null) {
             if (!TextUtils.isEmpty(weatherResponse.name)) {
                 city.setText(weatherResponse.name);
+            } else {
+                displayNoData(city);
+            }
+
+            if (weatherResponse.main != null) {
+                if (!TextUtils.isEmpty(String.valueOf(weatherResponse.main.temp))) {
+                    temperature.setText(getString(R.string.celsius, String.valueOf(Math.round(((weatherResponse.main.temp - Constants.KELVIN_CELSIUS_DIFFERENCE) * 100) / 100D))));
+                } else {
+                    displayNoData(temperature);
+                }
+                if (!TextUtils.isEmpty(String.valueOf(weatherResponse.main.humidity))) {
+                    humidity.setText(getString(R.string.rh, String.valueOf(weatherResponse.main.humidity)));
+                } else {
+                    displayNoData(humidity);
+                }
+                if (!TextUtils.isEmpty(String.valueOf(weatherResponse.main.pressure))) {
+                    pressure.setText(getString(R.string.hPa, String.valueOf(weatherResponse.main.pressure)));
+                } else {
+                    displayNoData(pressure);
+                }
+                if (!TextUtils.isEmpty(String.valueOf(weatherResponse.main.tempMin))) {
+                    tempMin.setText(getString(R.string.celsius, String.valueOf(Math.round(((weatherResponse.main.tempMin - Constants.KELVIN_CELSIUS_DIFFERENCE) * 100) / 100D))));
+                } else {
+                    displayNoData(tempMin);
+                }
+                if (!TextUtils.isEmpty(String.valueOf(weatherResponse.main.tempMax))) {
+                    tempMax.setText(getString(R.string.celsius, String.valueOf(Math.round(((weatherResponse.main.tempMax - Constants.KELVIN_CELSIUS_DIFFERENCE) * 100) / 100D))));
+                } else {
+                    displayNoData(tempMax);
+                }
+            }
+
+            if (weatherResponse.weather != null && weatherResponse.weather.get(0) != null) {
+                if (!TextUtils.isEmpty(weatherResponse.weather.get(0).description)) {
+                    if (!TextUtils.isEmpty(weatherResponse.weather.get(0).description)) {
+                        outside.setText(weatherResponse.weather.get(0).description);
+                    } else {
+                        displayNoData(outside);
+                    }
+
+                }
             }
         }
+    }
+
+    private void displayNoData(TextView textView) {
+        textView.setText(R.string.no_data);
     }
 }
