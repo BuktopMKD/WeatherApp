@@ -2,10 +2,10 @@ package com.musala_tech.weatherapp.model;
 
 public class Weather {
 
-    final private Integer id;
-    final private String main;
-    final private String description;
-    final private String icon;
+    final public Integer id;
+    final public String main;
+    final public String description;
+    final public String icon;
 
     public Weather(Integer id, String main, String description, String icon) {
         this.id = id;

@@ -7,19 +7,19 @@ import java.util.List;
 public class WeatherResponse {
 
     @SerializedName("coord")
-    final private Coordinates coordinates;
-    final private List<Weather> weather;
-    final private String base;
-    final private Main main;
-    final private Integer visibility;
-    final private Wind wind;
-    final private Clouds clouds;
-    final private Integer dt;
-    final private Sys sys;
-    final private Integer timezone;
-    final private Integer id;
-    final private String name;
-    final private Integer cod;
+    final public Coordinates coordinates;
+    final public List<Weather> weather;
+    final public String base;
+    final public Main main;
+    final public Integer visibility;
+    final public Wind wind;
+    final public Clouds clouds;
+    final public Integer dt;
+    final public Sys sys;
+    final public Integer timezone;
+    final public Integer id;
+    final public String name;
+    final public Integer cod;
 
     public WeatherResponse(Coordinates coordinates, List<Weather> weatherList, String base, Main main
             , Integer visibility, Wind wind, Clouds clouds, Integer dt, Sys sys, Integer timezone
