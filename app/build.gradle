@@ -59,4 +59,7 @@ dependencies {
 
     // AutoCrashReporter (ACR)
     implementation 'com.devs:acr:1.0.1'
+
+    // Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }
