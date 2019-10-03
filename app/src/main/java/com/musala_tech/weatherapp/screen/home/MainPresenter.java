@@ -36,6 +36,8 @@ public class MainPresenter implements MainContract.Presenter {
 
     private void cityWeatherSuccess(WeatherResponse weatherResponse) {
         Timber.i("---> cityWeatherSuccess %s", weatherResponse.name);
+        activity.displayWeather(weatherResponse);
+        // TODO implement progress view (spinner)
     }
 
     private void getCityWeatherError(Throwable error) {

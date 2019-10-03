@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
@@ -14,15 +15,20 @@ import androidx.appcompat.widget.SearchView;
 import com.musala_tech.weatherapp.R;
 import com.musala_tech.weatherapp.application.App;
 import com.musala_tech.weatherapp.common.BaseActivity;
+import com.musala_tech.weatherapp.model.WeatherResponse;
 
 import java.util.Objects;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivity extends BaseActivity {
+
+    @BindView(R.id.city)
+    TextView city;
 
     @Inject
     MainPresenter presenter;
@@ -72,13 +78,23 @@ public class MainActivity extends BaseActivity {
         inflater.inflate(R.menu.options_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+        if (searchManager != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        }
+        searchView.setIconifiedByDefault(false);
         return true;
     }
 
     @Override
     protected void setupActivityComponent() {
         App.get(this).getAppComponent().plus(new MainModule(this)).inject(this);
+    }
+
+    public void displayWeather(WeatherResponse weatherResponse) {
+        if (weatherResponse != null) {
+            if (!TextUtils.isEmpty(weatherResponse.name)) {
+                city.setText(weatherResponse.name);
+            }
+        }
     }
 }

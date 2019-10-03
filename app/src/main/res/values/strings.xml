@@ -5,4 +5,5 @@
     <string name="city">City</string>
     <string name="w_app">WApp</string>
     <string name="please_add_name">Please add city name</string>
+    <string name="selected_city">Selected city:</string>
 </resources>
