@@ -17,6 +17,8 @@ import com.musala_tech.weatherapp.application.App;
 import com.musala_tech.weatherapp.common.BaseActivity;
 import com.musala_tech.weatherapp.model.WeatherResponse;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -29,6 +31,8 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.city)
     TextView city;
+    @BindView(R.id.dateAndTime)
+    TextView dateAndTime;
 
     @Inject
     MainPresenter presenter;
@@ -48,6 +52,7 @@ public class MainActivity extends BaseActivity {
 
     private void setupUi() {
         handleIntent(getIntent());
+        dateAndTime.setText(DateFormat.getDateTimeInstance().format(new Date()));
     }
 
     @Override
