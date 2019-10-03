@@ -8,9 +8,14 @@ import com.musala_tech.weatherapp.R;
 import com.musala_tech.weatherapp.application.App;
 import com.musala_tech.weatherapp.common.BaseActivity;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
+
+    @Inject
+    MainPresenter presenter;
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, MainActivity.class));
@@ -21,6 +26,9 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        //TODO Test Remove it later
+        presenter.getCityWeather("Veles");
     }
 
     @Override
