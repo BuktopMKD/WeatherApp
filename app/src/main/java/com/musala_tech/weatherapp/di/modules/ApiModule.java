@@ -49,4 +49,10 @@ public class ApiModule {
     ApiService provideApiService(Retrofit retrofit) {
         return retrofit.create(ApiService.class);
     }
+
+    @Provides
+    @Singleton
+    Gson provideGson() {
+        return new Gson();
+    }
 }
