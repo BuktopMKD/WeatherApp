@@ -94,6 +94,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.w_app));
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -195,7 +196,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
-                    // Update UI with location data
                     currentLocation = location;
                     Timber.d("---> onLocationResult: %s ", currentLocation.getAccuracy());
                 }
@@ -224,7 +224,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         }
     }
 
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -243,7 +242,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         if (!TextUtils.isEmpty(city)) {
             presenter.getCityWeather(city);
         } else {
-            Toast.makeText(this, getString(R.string.please_add_name), Toast.LENGTH_SHORT).show();
+            showMessage(getString(R.string.please_add_name));
         }
     }
 

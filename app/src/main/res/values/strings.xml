@@ -1,9 +1,10 @@
 <resources>
-    <string name="search_hint">Please enter city name</string>
+    <string name="search_hint">Please enter location</string>
     <string name="search">Search</string>
     <string name="city">City</string>
     <string name="w_app">WApp</string>
-    <string name="please_add_name">Please add city name</string>
+    <string name="please_add_name">Please add location name</string>
+    <string name="city_not_found">Location not found</string>
     <string name="selected_city">Selected city:</string>
     <string name="temperature">Temperature:</string>
     <string name="no_data">No data</string>

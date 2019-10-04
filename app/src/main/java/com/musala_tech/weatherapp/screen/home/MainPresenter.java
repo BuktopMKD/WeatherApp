@@ -39,13 +39,12 @@ public class MainPresenter implements MainContract.Presenter {
     private void cityWeatherSuccess(WeatherResponse weatherResponse) {
         Timber.d("---> cityWeatherSuccess %s", weatherResponse.name);
         activity.displayWeather(weatherResponse);
-        // TODO implement progress view (spinner)
     }
 
     private void getCityWeatherError(Throwable error) {
         Timber.d("---> getCityWeatherError %s", error.getMessage());
         activity.hideProgress();
-        activity.showMessage(activity.getString(R.string.generic_error));
+        activity.showMessage(activity.getString(R.string.city_not_found));
     }
 
     @Override
@@ -57,7 +56,6 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     private void weatherByDeviceLocationSuccess(WeatherResponse weatherResponse) {
-        // TODO implement progress view (spinner)
         Timber.d("---> weatherByDeviceLocationSuccess %s", weatherResponse.name);
         activity.displayWeather(weatherResponse);
     }
