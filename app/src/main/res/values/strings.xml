@@ -10,7 +10,7 @@
     <string name="celsius">%1$s c&#176;</string>
     <string name="hPa">%1$s hPa</string>
     <string name="humidity">Humidity:</string>
-    <string name="hum">%1$s \%%</string>
+    <string name="hum">%1$s %%</string>
     <string name="pressure">Pressure:</string>
     <string name="temp_min">Temp min:</string>
     <string name="temp_max">Temp max:</string>
