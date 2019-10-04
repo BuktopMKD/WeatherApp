@@ -34,14 +34,33 @@ public class MainPresenter implements MainContract.Presenter {
                 .subscribe(this::cityWeatherSuccess, this::getCityWeatherError));
     }
 
+
     private void cityWeatherSuccess(WeatherResponse weatherResponse) {
-        Timber.i("---> cityWeatherSuccess %s", weatherResponse.name);
+        Timber.d("---> cityWeatherSuccess %s", weatherResponse.name);
         activity.displayWeather(weatherResponse);
         // TODO implement progress view (spinner)
     }
 
     private void getCityWeatherError(Throwable error) {
-        Timber.i("---> getCityWeatherError %s", error.getCause());
+        Timber.d("---> getCityWeatherError %s", error.getMessage());
+    }
+
+    @Override
+    public void getWeatherByDeviceLocation(double lat, double lon) {
+        request.add(service.getWeatherByDeviceLocation(lat, lon, Constants.API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::weatherByDeviceLocationSuccess, this::weatherByDeviceLocationError));
+    }
+
+    private void weatherByDeviceLocationSuccess(WeatherResponse weatherResponse) {
+        // TODO implement progress view (spinner)
+        Timber.d("---> weatherByDeviceLocationSuccess %s", weatherResponse.name);
+        activity.displayWeather(weatherResponse);
+    }
+
+    private void weatherByDeviceLocationError(Throwable error) {
+        Timber.d("---> weatherByDeviceLocationError %s", error.getMessage());
     }
 
     @Override

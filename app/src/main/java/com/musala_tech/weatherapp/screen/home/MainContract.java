@@ -14,5 +14,7 @@ public interface MainContract {
 
         void getCityWeather(String city);
 
+        void getWeatherByDeviceLocation(double lat, double lon);
+
     }
 }

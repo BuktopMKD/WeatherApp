@@ -1,17 +1,36 @@
 package com.musala_tech.weatherapp.screen.home;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.musala_tech.weatherapp.R;
 import com.musala_tech.weatherapp.application.App;
 import com.musala_tech.weatherapp.common.BaseActivity;
@@ -28,7 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements MainContract.View {
 
     @BindView(R.id.dateAndTime)
     TextView dateAndTime;
@@ -50,6 +69,17 @@ public class MainActivity extends BaseActivity {
     @Inject
     MainPresenter presenter;
 
+    private double latitude;
+    private double longitude;
+
+    private static final int REQUEST_CHECK_SETTINGS = 1;
+    private static final int REQUEST_GRANT_PERMISSION = 2;
+    private FusedLocationProviderClient fusedLocationClient;
+    LocationRequest locationRequest;
+    private Location currentLocation;
+    private LocationCallback locationCallback;
+
+
     public static void start(Context context) {
         context.startActivity(new Intent(context, MainActivity.class));
     }
@@ -61,12 +91,132 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setupUi();
+        checkLocationPermission();
+        createLocationRequest();
+        settingsCheck();
     }
 
     private void setupUi() {
         handleIntent(getIntent());
         dateAndTime.setText(DateFormat.getDateTimeInstance().format(new Date()));
     }
+
+    private void checkLocationPermission() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_GRANT_PERMISSION);
+            return;
+        }
+        if (locationCallback == null) {
+            buildLocationCallback();
+        }
+        if (currentLocation == null) {
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+        }
+    }
+
+    protected void createLocationRequest() {
+        locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    public void settingsCheck() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                Timber.d("---> onSuccess: settingsCheck");
+                getCurrentLocation();
+            }
+        });
+
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    Timber.d("---> onFailure: settingsCheck");
+                    try {
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(MainActivity.this,
+                                REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        Timber.d(sendEx);
+                    }
+                }
+            }
+        });
+    }
+
+    public void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        Timber.d("---> onSuccess: getLastLocation");
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            currentLocation = location;
+                            Timber.d("---> onSuccess:latitude %s", location.getLatitude());
+                            Timber.d("---> onSuccess:longitude %s", location.getLongitude());
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                            presenter.getWeatherByDeviceLocation(location.getLatitude(), location.getLongitude());
+                        } else {
+                            Timber.d("---> location is null");
+                            buildLocationCallback();
+                        }
+                    }
+                });
+    }
+
+    private void buildLocationCallback() {
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    // Update UI with location data
+                    currentLocation = location;
+                    Timber.d("---> onLocationResult: %s ", currentLocation.getAccuracy());
+
+                }
+            }
+
+            ;
+        };
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Timber.d("---> onActivityResult: ");
+        if (requestCode == REQUEST_CHECK_SETTINGS && resultCode == RESULT_OK)
+            getCurrentLocation();
+        if (requestCode == REQUEST_CHECK_SETTINGS && resultCode == RESULT_CANCELED)
+            showMessage("Please enable Location settings...!!!");
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_GRANT_PERMISSION) {
+            getCurrentLocation();
+        }
+    }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -159,5 +309,10 @@ public class MainActivity extends BaseActivity {
 
     private void displayNoData(TextView textView) {
         textView.setText(R.string.no_data);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
