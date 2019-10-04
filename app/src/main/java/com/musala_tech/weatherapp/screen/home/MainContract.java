@@ -8,6 +8,10 @@ public interface MainContract {
 
         void showMessage(String message);
 
+        void showProgress();
+
+        void hideProgress();
+
     }
 
     interface Presenter extends BaseActivityPresenter {

@@ -15,4 +15,5 @@
     <string name="temp_min">Temp min:</string>
     <string name="temp_max">Temp max:</string>
     <string name="outside">Outside:</string>
+    <string name="generic_error">Something went wrong. Please try again</string>
 </resources>

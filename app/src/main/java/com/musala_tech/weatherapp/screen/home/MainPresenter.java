@@ -1,5 +1,6 @@
 package com.musala_tech.weatherapp.screen.home;
 
+import com.musala_tech.weatherapp.R;
 import com.musala_tech.weatherapp.common.Constants;
 import com.musala_tech.weatherapp.model.WeatherResponse;
 import com.musala_tech.weatherapp.network.ApiService;
@@ -23,7 +24,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void onStart() {
-
+        //TODO
     }
 
     @Override
@@ -43,6 +44,8 @@ public class MainPresenter implements MainContract.Presenter {
 
     private void getCityWeatherError(Throwable error) {
         Timber.d("---> getCityWeatherError %s", error.getMessage());
+        activity.hideProgress();
+        activity.showMessage(activity.getString(R.string.generic_error));
     }
 
     @Override
@@ -61,6 +64,8 @@ public class MainPresenter implements MainContract.Presenter {
 
     private void weatherByDeviceLocationError(Throwable error) {
         Timber.d("---> weatherByDeviceLocationError %s", error.getMessage());
+        activity.hideProgress();
+        activity.showMessage(activity.getString(R.string.generic_error));
     }
 
     @Override

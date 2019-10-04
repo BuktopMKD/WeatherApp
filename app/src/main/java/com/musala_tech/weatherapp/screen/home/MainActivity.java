@@ -12,11 +12,13 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -65,6 +67,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     TextView tempMax;
     @BindView(R.id.outside)
     TextView outside;
+    @BindView(R.id.progress)
+    ConstraintLayout progress;
 
     @Inject
     MainPresenter presenter;
@@ -259,6 +263,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     }
 
     public void displayWeather(WeatherResponse weatherResponse) {
+        hideProgress();
         if (weatherResponse != null) {
             if (!TextUtils.isEmpty(weatherResponse.name)) {
                 city.setText(weatherResponse.name);
@@ -314,5 +319,15 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showProgress() {
+        progress.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        progress.setVisibility(View.INVISIBLE);
     }
 }
