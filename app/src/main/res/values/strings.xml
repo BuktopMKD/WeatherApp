@@ -16,4 +16,5 @@
     <string name="temp_max">Temp max:</string>
     <string name="outside">Outside:</string>
     <string name="generic_error">Something went wrong. Please try again</string>
+    <string name="my_location">My location</string>
 </resources>

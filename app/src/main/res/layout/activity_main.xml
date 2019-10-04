@@ -7,6 +7,18 @@
     android:background="@drawable/bg_weather_gradient"
     tools:context=".screen.home.MainActivity">
 
+    <Button
+        android:id="@+id/myLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@color/white"
+        android:padding="15dp"
+        android:text="@string/my_location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/outside" />
+
     <TextView
         android:id="@+id/dateAndTime"
         android:layout_width="wrap_content"

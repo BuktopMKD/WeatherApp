@@ -47,6 +47,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainContract.View {
@@ -78,6 +79,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     private static final int REQUEST_CHECK_SETTINGS = 1;
     private static final int REQUEST_GRANT_PERMISSION = 2;
+    private static final int LOCATION_REQUEST_INTERVAL = 10000;
+    private static final int LOCATION_REQUEST_FAST_INTERVAL = 5000;
     private FusedLocationProviderClient fusedLocationClient;
     LocationRequest locationRequest;
     private Location currentLocation;
@@ -121,8 +124,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     protected void createLocationRequest() {
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(5000);
+        locationRequest.setInterval(LOCATION_REQUEST_INTERVAL);
+        locationRequest.setFastestInterval(LOCATION_REQUEST_FAST_INTERVAL);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -178,6 +181,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         } else {
                             Timber.d("---> location is null");
                             buildLocationCallback();
+                            hideProgress();
                         }
                     }
                 });
@@ -194,7 +198,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                     // Update UI with location data
                     currentLocation = location;
                     Timber.d("---> onLocationResult: %s ", currentLocation.getAccuracy());
-
                 }
             }
 
@@ -329,5 +332,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     public void hideProgress() {
         progress.setVisibility(View.INVISIBLE);
+    }
+
+    @OnClick(R.id.myLocation)
+    public void onMyLocationClick() {
+        showProgress();
+        getCurrentLocation();
     }
 }
