@@ -7,14 +7,14 @@
     android:background="@drawable/bg_weather_gradient"
     tools:context="com.denofdevelopers.weatherapp.screen.home.MainActivity">
 
-    <TextView
+    <Button
         android:id="@+id/myLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="25dp"
         android:background="@drawable/bg_button"
-        android:elevation="10dp"
+        android:foreground="?attr/selectableItemBackground"
         android:padding="15dp"
         android:text="@string/my_location"
         android:textAllCaps="true"
