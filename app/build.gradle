@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
     defaultConfig {
-        applicationId "com.denofdevelopers.weatherapp"
+        applicationId "com.musala_tech.weatherapp"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -13,16 +13,8 @@ android {
     }
     buildTypes {
         release {
-            debuggable false
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            debuggable true
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
