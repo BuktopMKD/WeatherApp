@@ -1,9 +1,10 @@
 package com.denofdevelopers.weatherapp.screen.home;
 
-import com.denofdevelopers.weatherapp.model.WeatherResponse;
-import com.musala_tech.weatherapp.R;
 import com.denofdevelopers.weatherapp.common.Constants;
+import com.denofdevelopers.weatherapp.model.WeatherResponse;
 import com.denofdevelopers.weatherapp.network.ApiService;
+import com.denofdevelopers.weatherapp.util.NetworkUtil;
+import com.musala_tech.weatherapp.R;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -63,7 +64,11 @@ public class MainPresenter implements MainContract.Presenter {
     private void weatherByDeviceLocationError(Throwable error) {
         Timber.d("---> weatherByDeviceLocationError %s", error.getMessage());
         activity.hideProgress();
-        activity.showMessage(activity.getString(R.string.generic_error));
+        if (!NetworkUtil.isConnected(activity)) {
+            activity.showMessage(activity.getString(R.string.no_internet_connection));
+        } else {
+            activity.showMessage(activity.getString(R.string.generic_error));
+        }
     }
 
     @Override

@@ -21,8 +21,11 @@ import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
+import com.denofdevelopers.weatherapp.application.App;
 import com.denofdevelopers.weatherapp.common.BaseActivity;
+import com.denofdevelopers.weatherapp.common.Constants;
 import com.denofdevelopers.weatherapp.model.WeatherResponse;
+import com.denofdevelopers.weatherapp.util.NetworkUtil;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -32,12 +35,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.musala_tech.weatherapp.R;
-import com.denofdevelopers.weatherapp.application.App;
-import com.denofdevelopers.weatherapp.common.Constants;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -102,6 +102,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         checkLocationPermission();
         createLocationRequest();
         settingsCheck();
+        noInternetMessage();
     }
 
     private void setupUi() {
@@ -136,26 +137,20 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         SettingsClient client = LocationServices.getSettingsClient(this);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
-            @Override
-            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                Timber.d("---> onSuccess: settingsCheck");
-                getCurrentLocation();
-            }
+        task.addOnSuccessListener(this, locationSettingsResponse -> {
+            Timber.d("---> onSuccess: settingsCheck");
+            getCurrentLocation();
         });
 
-        task.addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                if (e instanceof ResolvableApiException) {
-                    Timber.d("---> onFailure: settingsCheck");
-                    try {
-                        ResolvableApiException resolvable = (ResolvableApiException) e;
-                        resolvable.startResolutionForResult(MainActivity.this,
-                                REQUEST_CHECK_SETTINGS);
-                    } catch (IntentSender.SendIntentException sendEx) {
-                        Timber.d(sendEx);
-                    }
+        task.addOnFailureListener(this, e -> {
+            if (e instanceof ResolvableApiException) {
+                Timber.d("---> onFailure: settingsCheck");
+                try {
+                    ResolvableApiException resolvable = (ResolvableApiException) e;
+                    resolvable.startResolutionForResult(MainActivity.this,
+                            REQUEST_CHECK_SETTINGS);
+                } catch (IntentSender.SendIntentException sendEx) {
+                    Timber.d(sendEx);
                 }
             }
         });
@@ -337,5 +332,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     public void onMyLocationClick() {
         showProgress();
         getCurrentLocation();
+    }
+
+    private void noInternetMessage() {
+        if (!NetworkUtil.isConnected(this)) {
+            Toast.makeText(this, R.string.no_internet_connection, Toast.LENGTH_LONG).show();
+        }
     }
 }
