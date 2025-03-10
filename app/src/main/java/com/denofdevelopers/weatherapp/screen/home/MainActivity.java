@@ -37,7 +37,7 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.musala_tech.weatherapp.R;
+import com.denofdevelopers.weatherapp.R;
 
 import java.text.DateFormat;
 import java.util.Date;

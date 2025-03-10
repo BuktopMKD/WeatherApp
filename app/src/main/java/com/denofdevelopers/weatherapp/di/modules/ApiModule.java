@@ -3,7 +3,7 @@ package com.denofdevelopers.weatherapp.di.modules;
 import com.denofdevelopers.weatherapp.network.ApiService;
 import com.google.gson.Gson;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.musala_tech.weatherapp.BuildConfig;
+import com.denofdevelopers.weatherapp.BuildConfig;
 
 import java.util.concurrent.TimeUnit;
 

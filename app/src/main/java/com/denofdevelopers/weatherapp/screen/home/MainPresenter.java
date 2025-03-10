@@ -4,7 +4,7 @@ import com.denofdevelopers.weatherapp.common.Constants;
 import com.denofdevelopers.weatherapp.model.WeatherResponse;
 import com.denofdevelopers.weatherapp.network.ApiService;
 import com.denofdevelopers.weatherapp.util.NetworkUtil;
-import com.musala_tech.weatherapp.R;
+import com.denofdevelopers.weatherapp.R;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;

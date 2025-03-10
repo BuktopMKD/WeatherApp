@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.denofdevelopers.weatherapp.screen.home.MainActivity;
-import com.musala_tech.weatherapp.R;
+import com.denofdevelopers.weatherapp.R;
 
 public class SplashScreen extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.musala_tech.weatherapp;
+package com.denofdevelopers.weatherapp;
 
 import org.junit.Test;
 
