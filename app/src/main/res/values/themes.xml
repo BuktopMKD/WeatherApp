@@ -16,7 +16,7 @@
     <!-- Splash Screen Theme -->
     <style name="AppTheme.Launcher" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/launch_screen</item>
-        <item name="android:colorBackground">@color/white</item>
+        <item name="android:colorBackground">@color/dark_bg</item>
     </style>
 
 </resources>

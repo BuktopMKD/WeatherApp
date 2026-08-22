@@ -35,6 +35,17 @@
             android:textStyle="bold"
             tools:text="22°C" />
 
+        <TextView
+            android:id="@+id/forecastDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:textColor="@color/text_secondary"
+            android:textSize="8sp"
+            android:textAllCaps="true"
+            tools:text="Cloudy" />
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
