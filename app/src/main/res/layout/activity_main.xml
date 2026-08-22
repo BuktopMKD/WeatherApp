@@ -2,23 +2,35 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_weather_gradient"
     tools:context="com.denofdevelopers.weatherapp.screen.home.MainActivity">
 
-    <Button
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.Material3.Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/myLocation"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="25dp"
-        android:background="@drawable/bg_button"
-        android:foreground="?attr/selectableItemBackground"
-        android:padding="15dp"
         android:text="@string/my_location"
         android:textAllCaps="true"
         android:textStyle="bold"
+        app:strokeColor="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -31,7 +43,7 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:textSize="@dimen/text_size_large"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <TextView
         android:id="@+id/cityText"

@@ -2,8 +2,15 @@
 <resources>
 
     <color name="colorPrimary">#5EB1BF</color>
-    <color name="colorPrimaryDark">#042A2B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorPrimaryContainer">#C7E7EC</color>
+    <color name="colorOnPrimaryContainer">#042A2B</color>
+
+    <color name="colorSecondary">#D81B60</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnSurface">#1A1C1C</color>
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>

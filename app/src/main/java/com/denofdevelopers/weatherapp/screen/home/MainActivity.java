@@ -16,10 +16,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.denofdevelopers.weatherapp.application.App;
 import com.denofdevelopers.weatherapp.common.BaseActivity;
@@ -52,6 +57,10 @@ import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainContract.View {
 
+    @BindView(R.id.mainRoot)
+    ConstraintLayout mainRoot;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.dateAndTime)
     TextView dateAndTime;
     @BindView(R.id.city)
@@ -94,15 +103,30 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.w_app));
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.w_app));
+        applyWindowInsets();
         setupUi();
         checkLocationPermission();
         createLocationRequest();
         settingsCheck();
         noInternetMessage();
+    }
+
+    private void applyWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (view, windowInsets) -> {
+            Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            view.setPadding(view.getPaddingLeft(), systemBars.top, view.getPaddingRight(), view.getPaddingBottom());
+            return windowInsets;
+        });
+        ViewCompat.setOnApplyWindowInsetsListener(mainRoot, (view, windowInsets) -> {
+            Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            view.setPadding(view.getPaddingLeft(), view.getPaddingTop(), view.getPaddingRight(), systemBars.bottom);
+            return windowInsets;
+        });
     }
 
     private void setupUi() {
