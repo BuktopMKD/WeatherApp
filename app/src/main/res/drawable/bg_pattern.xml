@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="800dp"
+    android:viewportWidth="400"
+    android:viewportHeight="800">
+
+    <!-- Base background color (Dark) -->
+    <path
+        android:fillColor="#101720"
+        android:pathData="M0,0h400v800h-400z" />
+
+    <!-- Dark Abstract Wave 1 -->
+    <path
+        android:fillColor="#1B263B"
+        android:pathData="M0,600 C150,550 250,650 400,600 V800 H0 Z" />
+
+    <!-- Dark Abstract Wave 2 -->
+    <path
+        android:fillColor="#0D1B2A"
+        android:pathData="M0,700 C100,650 300,750 400,700 V800 H0 Z" />
+
+    <!-- Dark Abstract Wave 3 (Top) -->
+    <path
+        android:fillColor="#15202B"
+        android:pathData="M0,100 C150,150 250,50 400,100 V0 H0 Z" />
+
+</vector>

@@ -1,5 +1,6 @@
 package com.denofdevelopers.weatherapp.network;
 
+import com.denofdevelopers.weatherapp.model.ForecastResponse;
 import com.denofdevelopers.weatherapp.model.WeatherResponse;
 
 import io.reactivex.Single;
@@ -13,4 +14,10 @@ public interface ApiService {
 
     @GET("weather")
     Single<WeatherResponse> getWeatherByDeviceLocation(@Query("lat") double latitude, @Query("lon") double longitude, @Query("APPID") String API_KEY);
+
+    @GET("forecast")
+    Single<ForecastResponse> getCityForecast(@Query("q") String city, @Query("APPID") String API_KEY);
+
+    @GET("forecast")
+    Single<ForecastResponse> getForecastByDeviceLocation(@Query("lat") double latitude, @Query("lon") double longitude, @Query("APPID") String API_KEY);
 }

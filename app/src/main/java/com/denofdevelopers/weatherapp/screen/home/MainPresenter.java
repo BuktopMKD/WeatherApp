@@ -1,6 +1,7 @@
 package com.denofdevelopers.weatherapp.screen.home;
 
 import com.denofdevelopers.weatherapp.common.Constants;
+import com.denofdevelopers.weatherapp.model.ForecastResponse;
 import com.denofdevelopers.weatherapp.model.WeatherResponse;
 import com.denofdevelopers.weatherapp.network.ApiService;
 import com.denofdevelopers.weatherapp.util.NetworkUtil;
@@ -34,8 +35,16 @@ public class MainPresenter implements MainContract.Presenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::cityWeatherSuccess, this::getCityWeatherError));
+
+        request.add(service.getCityForecast(city, Constants.API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::forecastSuccess, error -> Timber.e(error, "Forecast Error")));
     }
 
+    private void forecastSuccess(ForecastResponse forecastResponse) {
+        activity.displayForecast(forecastResponse);
+    }
 
     private void cityWeatherSuccess(WeatherResponse weatherResponse) {
         Timber.d("---> cityWeatherSuccess %s", weatherResponse.name);
@@ -54,6 +63,11 @@ public class MainPresenter implements MainContract.Presenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::weatherByDeviceLocationSuccess, this::weatherByDeviceLocationError));
+
+        request.add(service.getForecastByDeviceLocation(lat, lon, Constants.API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::forecastSuccess, error -> Timber.e(error, "Forecast Error")));
     }
 
     private void weatherByDeviceLocationSuccess(WeatherResponse weatherResponse) {

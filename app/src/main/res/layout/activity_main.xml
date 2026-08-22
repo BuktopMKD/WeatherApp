@@ -5,7 +5,8 @@
     android:id="@+id/mainRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_weather_gradient"
+    android:background="@drawable/bg_pattern"
+    android:keepScreenOn="true"
     tools:context="com.denofdevelopers.weatherapp.screen.home.MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -13,196 +14,272 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.Material3.Light"
+        android:background="@android:color/transparent"
+        android:theme="@style/ThemeOverlay.Material3.Dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/myLocation"
-        style="@style/Widget.Material3.Button.OutlinedButton"
+    <!-- Top Time and Date (Fixed at top) -->
+    <LinearLayout
+        android:id="@+id/timeContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="25dp"
-        android:text="@string/my_location"
-        android:textAllCaps="true"
-        android:textStyle="bold"
-        app:strokeColor="?attr/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-    <TextView
-        android:id="@+id/dateAndTime"
+        <TextView
+            android:id="@+id/currentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            tools:text="12:45" />
+
+        <TextView
+            android:id="@+id/currentDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:textSize="18sp"
+            tools:text="Saturday, Aug 22" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/myLocation"
+        app:layout_constraintTop_toBottomOf="@id/timeContainer">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                tools:text="London" />
+
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/accent_blue"
+                android:textSize="96sp"
+                android:textStyle="bold"
+                tools:text="24°C" />
+
+            <TextView
+                android:id="@+id/outside"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="20sp"
+                android:textAllCaps="true"
+                android:letterSpacing="0.1"
+                tools:text="Partly Cloudy" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="32dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="3-DAY FORECAST"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:letterSpacing="0.1"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fillViewport="true"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/forecastContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="EXTENDED FORECAST"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:letterSpacing="0.1"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fillViewport="true"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/extendedForecastContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/glass_white"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:padding="20dp"
+                    android:rowCount="2">
+
+                    <!-- Humidity -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:padding="8dp"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/humidity"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/humidity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            tools:text="65%" />
+                    </LinearLayout>
+
+                    <!-- Pressure -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:padding="8dp"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pressure"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/pressure"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            tools:text="1012 hPa" />
+                    </LinearLayout>
+
+                    <!-- Min Temp -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:padding="8dp"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/temp_min"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/tempMin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            tools:text="18°C" />
+                    </LinearLayout>
+
+                    <!-- Max Temp -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical"
+                        android:padding="8dp"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/temp_max"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/tempMax"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            tools:text="28°C" />
+                    </LinearLayout>
+
+                </GridLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/myLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:textSize="@dimen/text_size_large"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-    <TextView
-        android:id="@+id/cityText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:text="@string/selected_city"
-        android:textSize="@dimen/text_size_x_large"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dateAndTime" />
-
-    <TextView
-        android:id="@+id/city"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:textSize="@dimen/text_size_xxx_large"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cityText" />
-
-    <TextView
-        android:id="@+id/temperatureText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="@string/temperature"
-        android:textSize="@dimen/text_size_x_large"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/city" />
-
-    <TextView
-        android:id="@+id/temperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:textSize="64sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/temperatureText" />
-
-    <TextView
-        android:id="@+id/humidityText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="@string/humidity"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/temperature" />
-
-    <TextView
-        android:id="@+id/humidity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:textSize="@dimen/text_size_large"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/humidityText" />
-
-    <TextView
-        android:id="@+id/pressureText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="@string/pressure"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/humidity" />
-
-    <TextView
-        android:id="@+id/pressure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:textSize="@dimen/text_size_large"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pressureText" />
-
-    <TextView
-        android:id="@+id/tempMinText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="@string/temp_min"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pressure" />
-
-    <TextView
-        android:id="@+id/tempMin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="6dp"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:textSize="@dimen/text_size_large"
-        app:layout_constraintBottom_toBottomOf="@id/tempMinText"
-        app:layout_constraintStart_toEndOf="@id/tempMinText"
-        app:layout_constraintTop_toTopOf="@id/tempMinText" />
-
-    <TextView
-        android:id="@+id/tempMaxText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/temp_max"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/tempMinText"
-        app:layout_constraintStart_toEndOf="@id/tempMin"
-        app:layout_constraintTop_toTopOf="@id/tempMinText" />
-
-    <TextView
-        android:id="@+id/tempMax"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="6dp"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:textSize="@dimen/text_size_large"
-        app:layout_constraintBottom_toBottomOf="@id/tempMinText"
-        app:layout_constraintStart_toEndOf="@id/tempMaxText"
-        app:layout_constraintTop_toTopOf="@id/tempMinText" />
-
-    <TextView
-        android:id="@+id/outsideText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="@string/outside"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tempMinText" />
-
-    <TextView
-        android:id="@+id/outside"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:textSize="@dimen/text_size_large"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/outsideText" />
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:contentDescription="@string/my_location"
+        app:srcCompat="@drawable/ic_my_location"
+        app:backgroundTint="@color/accent_blue"
+        app:tint="@color/white"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <include layout="@layout/progress_view" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

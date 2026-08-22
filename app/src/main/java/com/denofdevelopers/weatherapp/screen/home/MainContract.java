@@ -1,6 +1,8 @@
 package com.denofdevelopers.weatherapp.screen.home;
 
 import com.denofdevelopers.weatherapp.common.presenter.BaseActivityPresenter;
+import com.denofdevelopers.weatherapp.model.ForecastResponse;
+import com.denofdevelopers.weatherapp.model.WeatherResponse;
 
 public interface MainContract {
 
@@ -11,6 +13,10 @@ public interface MainContract {
         void showProgress();
 
         void hideProgress();
+
+        void displayWeather(WeatherResponse weatherResponse);
+
+        void displayForecast(ForecastResponse forecastResponse);
 
     }
 

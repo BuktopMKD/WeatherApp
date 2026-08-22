@@ -8,11 +8,14 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +32,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.denofdevelopers.weatherapp.application.App;
 import com.denofdevelopers.weatherapp.common.BaseActivity;
 import com.denofdevelopers.weatherapp.common.Constants;
+import com.denofdevelopers.weatherapp.model.ForecastItem;
+import com.denofdevelopers.weatherapp.model.ForecastResponse;
 import com.denofdevelopers.weatherapp.model.WeatherResponse;
 import com.denofdevelopers.weatherapp.util.NetworkUtil;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -44,8 +49,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.denofdevelopers.weatherapp.R;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -61,8 +67,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     ConstraintLayout mainRoot;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.dateAndTime)
-    TextView dateAndTime;
+    @BindView(R.id.currentTime)
+    TextView currentTime;
+    @BindView(R.id.currentDate)
+    TextView currentDate;
     @BindView(R.id.city)
     TextView city;
     @BindView(R.id.temperature)
@@ -77,6 +85,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     TextView tempMax;
     @BindView(R.id.outside)
     TextView outside;
+    @BindView(R.id.forecastContainer)
+    LinearLayout forecastContainer;
+    @BindView(R.id.extendedForecastContainer)
+    LinearLayout extendedForecastContainer;
     @BindView(R.id.progress)
     ConstraintLayout progress;
 
@@ -95,6 +107,15 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     private Location currentLocation;
     private LocationCallback locationCallback;
 
+    private final Handler timeHandler = new Handler(Looper.getMainLooper());
+    private final Runnable timeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            updateTime();
+            timeHandler.postDelayed(this, 1000 * 60); // Update every minute
+        }
+    };
+
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, MainActivity.class));
@@ -107,13 +128,27 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.w_app));
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         applyWindowInsets();
         setupUi();
         checkLocationPermission();
         createLocationRequest();
         settingsCheck();
         noInternetMessage();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        timeHandler.post(timeRunnable);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timeHandler.removeCallbacks(timeRunnable);
     }
 
     private void applyWindowInsets() {
@@ -131,7 +166,13 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     private void setupUi() {
         handleIntent(getIntent());
-        dateAndTime.setText(DateFormat.getDateTimeInstance().format(new Date()));
+        updateTime();
+    }
+
+    private void updateTime() {
+        Date now = new Date();
+        currentTime.setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(now));
+        currentDate.setText(new SimpleDateFormat("EEEE, MMM dd", Locale.getDefault()).format(now));
     }
 
     private void checkLocationPermission() {
@@ -275,6 +316,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         }
         searchView.setIconifiedByDefault(false);
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         return true;
     }
 
@@ -330,6 +372,50 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
                 }
             }
+        }
+    }
+
+    public void displayForecast(ForecastResponse forecastResponse) {
+        forecastContainer.removeAllViews();
+        extendedForecastContainer.removeAllViews();
+        if (forecastResponse != null && forecastResponse.forecastList != null) {
+            LayoutInflater inflater = LayoutInflater.from(this);
+            
+            // 3-Day Forecast (Indices 8, 16, 24)
+            int[] mainIndices = {8, 16, 24};
+            for (int index : mainIndices) {
+                if (index < forecastResponse.forecastList.size()) {
+                    ForecastItem item = forecastResponse.forecastList.get(index);
+                    View view = inflater.inflate(R.layout.item_forecast, forecastContainer, false);
+                    populateForecastView(view, item);
+                    forecastContainer.addView(view);
+                }
+            }
+
+            // Extended Forecast (All other distinct days)
+            // The free API gives 5 days / 3 hours (40 items). 
+            // We'll show one item per day for the full range available.
+            for (int i = 0; i < forecastResponse.forecastList.size(); i += 8) {
+                ForecastItem item = forecastResponse.forecastList.get(i);
+                View view = inflater.inflate(R.layout.item_forecast_small, extendedForecastContainer, false);
+                populateForecastView(view, item);
+                extendedForecastContainer.addView(view);
+            }
+        }
+    }
+
+    private void populateForecastView(View view, ForecastItem item) {
+        TextView dayText = view.findViewById(R.id.forecastDay);
+        TextView tempText = view.findViewById(R.id.forecastTemp);
+        TextView descText = view.findViewById(R.id.forecastDesc);
+        
+        Date date = new Date(item.dateTime * 1000);
+        dayText.setText(new SimpleDateFormat("EEE", Locale.getDefault()).format(date));
+        
+        tempText.setText(getString(R.string.celsius, String.valueOf(Math.round(((item.main.temp - Constants.KELVIN_CELSIUS_DIFFERENCE) * 100) / 100D))));
+        
+        if (descText != null && item.weather != null && !item.weather.isEmpty()) {
+            descText.setText(item.weather.get(0).description);
         }
     }
 
